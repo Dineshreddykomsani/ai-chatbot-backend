@@ -20,9 +20,16 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
+from django.http import JsonResponse
 
+def home(request):
+    return JsonResponse({
+        "message": "AI Chatbot Backend is running",
+        "documentation": "/swagger/"
+    })
 urlpatterns = [
     # Admin
+    path('', home),
     path('admin/', admin.site.urls),
 
     # JWT Authentication
