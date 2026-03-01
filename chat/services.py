@@ -1,7 +1,6 @@
 import os
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def build_prompt(messages):
     prompt = [
@@ -19,6 +18,8 @@ def build_prompt(messages):
 
 def call_llm(prompt):
     try:
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=prompt,
