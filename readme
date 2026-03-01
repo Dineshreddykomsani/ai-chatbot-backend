@@ -1,0 +1,129 @@
+
+AI-Powered Chatbot Backend
+
+This project is a production-ready backend service for an AI-powered chatbot system built using Django and Django REST Framework. The goal of this project is to design a scalable and cleanly structured backend that can manage authenticated users, maintain conversation sessions, and integrate with an AI model for automated responses.
+
+Overview
+
+This backend system supports authenticated users through JWT authentication. Each user can create multiple chat sessions, and each session maintains a full conversation history. The system integrates with an LLM (Large Language Model) to generate AI responses. If the AI service fails or times out, the system gracefully returns a fallback response instead of crashing.
+
+The application is designed to work with SQLite during local development and PostgreSQL in production. The database configuration is controlled using environment variables.
+
+Architecture
+
+The system follows a layered architecture to maintain clean separation of concerns.
+
+The API layer (Views) handles incoming HTTP requests and returns responses.
+The validation layer (Serializers) validates input data and structures responses.
+The data layer (Models) defines the database schema and relationships.
+The service layer handles AI integration and business logic.
+
+The request flow works as follows:
+
+A user authenticates using JWT.
+The user creates a chat session.
+The user sends a message.
+The message is stored in the database.
+The system builds a prompt using session history.
+The AI model generates a response.
+The response is stored and returned to the user.
+
+Database Design
+
+The database uses a relational structure managed by Django ORM.
+
+Each User can have multiple ChatSessions.
+Each ChatSession can have multiple Messages.
+Each Message stores a role (user or assistant) and the message content.
+
+This design ensures support for multiple users, multiple sessions per user, and persistent chat history.
+
+Authentication
+
+Authentication is implemented using JWT (JSON Web Tokens) via djangorestframework-simplejwt.
+
+The system provides access and refresh tokens.
+Protected endpoints require the Authorization header with the format:
+Bearer <access_token>
+
+AI Integration
+
+AI integration is handled in a separate service layer.
+The system builds prompts using the entire session history to maintain context.
+If the AI service fails, a fallback message is returned.
+This ensures reliability and graceful error handling.
+
+API Endpoints
+
+Authentication endpoints:
+POST /api/token/
+POST /api/token/refresh/
+
+Chat endpoints:
+POST /api/chat/sessions/
+GET /api/chat/sessions/{session_id}/
+POST /api/chat/sessions/{session_id}/message/
+
+API Documentation
+
+Swagger documentation is available at:
+/swagger/
+
+Environment Configuration
+
+The system uses environment variables for configuration.
+
+Required variables include:
+SECRET_KEY
+DEBUG
+USE_SQLITE
+DATABASE_URL (for production)
+OPENAI_API_KEY
+
+Local Setup Instructions
+
+Clone the repository and navigate to the project directory.
+
+Create a virtual environment and activate it.
+
+Install dependencies using pip install -r requirements.txt.
+
+Create a .env file and add:
+
+SECRET_KEY=your-secret
+DEBUG=True
+USE_SQLITE=True
+
+Run database migrations using python manage.py migrate.
+
+Create a superuser using python manage.py createsuperuser.
+
+Start the server using python manage.py runserver.
+
+Swagger can be accessed at [http://127.0.0.1:8000/swagger/](http://127.0.0.1:8000/swagger/)
+
+Deployment
+
+The project is configured for deployment on Railway.
+It supports PostgreSQL in production using DATABASE_URL.
+Gunicorn is used as the production WSGI server.
+The database engine automatically switches based on environment variables.
+
+Scalability Considerations
+
+The system uses stateless JWT authentication, allowing horizontal scaling.
+Database indexing is applied on session and timestamp fields for performance.
+Rate limiting is enabled to prevent abuse.
+AI logic is abstracted into a service layer for future extensibility.
+Environment-based configuration makes the system deployment-ready.
+
+Assumptions
+
+Only one LLM provider is used.
+No frontend is included as this is an API-only backend.
+Basic rate limiting is sufficient for MVP usage.
+
+Author
+
+Dinesh Reddy
+
