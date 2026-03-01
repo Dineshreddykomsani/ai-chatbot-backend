@@ -1,1 +1,1 @@
-web: gunicorn chatbot.wsgi:application
+web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn chatbot.wsgi:application
