@@ -174,5 +174,5 @@ SWAGGER_SETTINGS = {
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 ALLOWED_HOSTS = ["*"]
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
